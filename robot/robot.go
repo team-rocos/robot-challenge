@@ -194,7 +194,7 @@ func (r *Robot) modeLogic() {
 
 			r.state = r.nextState
 			print("---- Robot '" + r.name + "' finished command '" + r.commander.GetCommand() + "' ")
-			print("new Mode: (X: ", r.state.X, ", Y: ", r.state.Y, ")")
+			print("new State: (X: ", r.state.X, ", Y: ", r.state.Y, ")")
 			if r.state.HasCrate {
 				println(" HasCrate: T")
 			} else {

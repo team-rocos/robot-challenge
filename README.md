@@ -1,6 +1,6 @@
 Note: 
 
-It's my first time using go and my first time using the interface concept. 
+It's my first time using go, and my first time using the interface concept. 
 
 I haven't ever written code for anyone other than myself either!
 
@@ -10,6 +10,10 @@ I wasn't entirely sure how the channels returned by "EnqueueTask" were meant to 
 # Robot Warehouse Simulation Library
 
 ## Packages (a brief description)
+**main**      - contains some test/sample files.
+
+**simcli**    - simulator command-line interface.
+
 **librobot**  - interfaces for Warehouse and Robot objects, implemented by **warehouse** and **robot** packages
 
 **warehouse** - simulated warehouse has a discrete size and has functions to add/remove robots & crates, start/stop robots and issue robot tasks
