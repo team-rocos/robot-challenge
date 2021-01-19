@@ -171,11 +171,6 @@ func (c *Cli) parseInput(input string) {
 	}
 }
 
-func (c Cli) QuitIfNoTasks() {
-	for
-	c.exit = true
-}
-
 func (c *Cli) AddWarehouse(id string, x, y int) {
 	index := c.findWarehouseId(id)
 	if index > -1 {
@@ -235,6 +230,17 @@ func (c *Cli) AddTask(warehouseId, robotId, commands string) {
 		err:      err,
 	}
 	c.tasks = append(c.tasks, task)
+}
+
+func (c *Cli) QuitIfNoTasks() {
+	for _, w := range c.warehouses {
+		for _, r := range w.Robots() {
+			if r.HasTasks() {
+				return
+			}
+		}
+	}
+	c.exit = true
 }
 
 func (c Cli) findWarehouseId(id string) int {
