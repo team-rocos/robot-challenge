@@ -50,6 +50,9 @@ func (c *Cli) loopCli() {
 		//	pos := <-t.position
 		//	fmt.Println("Task", t.taskId,", Robot:", t.robotId,", x:", pos.X,", y:", pos.Y,", hasCrate:", pos.HasCrate)
 		//}
+		if text == "exit" || c.exit {
+			break
+		}
 	}
 	c.isRunning = false
 	c.exit = false

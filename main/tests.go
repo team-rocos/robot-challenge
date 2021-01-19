@@ -10,14 +10,19 @@ import (
 */
 
 func main() {
+	testRobotCollision()
+}
+
+func testRobotCollision() {
 	cli := simcli.NewSimulatorCli()
-	cli.AddWarehouse("w1", 10, 10)
-	cli.AddRobot("w1", "r1", 1, 4)
-	cli.AddRobot("w1", "r2", 3, 2)
-	cli.AddTask("w1", "r1", "EEEEE")
-	cli.AddTask("w1", "r2", "NNNNN")
+	//cli.AddWarehouse("w1", 10, 10)
+	//cli.AddRobot("w1", "r1", 1, 4)
+	//cli.AddRobot("w1", "r2", 3, 2)
+	//cli.AddTask("w1", "r1", "EEEEE")
+	//cli.AddTask("w1", "r2", "NNNNN")
 
 	for cli.IsRunning() {
 		time.Sleep(time.Second * 1)
+		cli.QuitIfNoTasks()
 	}
 }
