@@ -71,7 +71,17 @@ func (p move) FinalState(state librobot.RobotState) librobot.RobotState {
 		x += 1
 		y += 1
 		break
+	case "EN":
+		x += 1
+		y += 1
+		break
 	case "SE":
+		x += 1
+		if y > 0 {
+			y -= 1
+		}
+		break
+	case "ES":
 		x += 1
 		if y > 0 {
 			y -= 1
@@ -85,7 +95,21 @@ func (p move) FinalState(state librobot.RobotState) librobot.RobotState {
 			y -= 1
 		}
 		break
+	case "WS":
+		if x > 0 {
+			x -= 1
+		}
+		if y > 0 {
+			y -= 1
+		}
+		break
 	case "NW":
+		if x > 0 {
+			x -= 1
+		}
+		y += 1
+		break
+	case "WN":
 		if x > 0 {
 			x -= 1
 		}
