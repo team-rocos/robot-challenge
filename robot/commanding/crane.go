@@ -1,8 +1,8 @@
 package commanding
 
 import (
-	"RobotWarehouseSimLib/librobot"
 	"errors"
+	"github.com/solimov-advanced/robot-challenge/librobot"
 	"time"
 )
 

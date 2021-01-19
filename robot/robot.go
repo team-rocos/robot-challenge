@@ -1,9 +1,9 @@
 package robot
 
 import (
-	"RobotWarehouseSimLib/librobot"
-	"RobotWarehouseSimLib/robot/commanding"
-	"RobotWarehouseSimLib/robot/tasking"
+	"github.com/solimov-advanced/robot-challenge/librobot"
+	"github.com/solimov-advanced/robot-challenge/robot/commanding"
+	"github.com/solimov-advanced/robot-challenge/robot/tasking"
 	"strconv"
 	"time"
 )

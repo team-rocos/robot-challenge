@@ -1,7 +1,7 @@
 package commanding
 
 import (
-	"RobotWarehouseSimLib/librobot"
+	"github.com/solimov-advanced/robot-challenge/librobot"
 )
 
 // Command provides an abstraction of a command that can be executed by a Robot
