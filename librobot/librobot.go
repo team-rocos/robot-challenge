@@ -35,6 +35,7 @@ type Robot interface {
 	NextState() RobotState
 	Name() string
 	StatusInfo() string
+	HasTasks() bool
 }
 
 // RobotState provides an abstraction of the state of a warehouse robot.

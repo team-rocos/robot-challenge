@@ -152,6 +152,7 @@ func (r *Robot) modeLogic() {
 				for _, bot := range r.environment.Robots() {
 					state := bot.State()
 					nextState := bot.NextState()
+					// TODO: We need to check for robot passing infront diagonally
 					if r.name == bot.Name() {
 						continue
 					} else if (finalState.X == state.X && finalState.Y == state.Y) ||
@@ -239,6 +240,11 @@ func (r Robot) Name() string {
 // StatusInfo returns a message containing the robot status, used for debugging.
 func (r Robot) StatusInfo() string {
 	return "isRunning: " + strconv.FormatBool(r.isRunning) + ", mode: " + strconv.Itoa(int(r.mode)) + ", tasks: " + strconv.Itoa(r.tasks.Count())
+}
+
+// HasTasks returns false if the robot has no tasks.
+func (r Robot) HasTasks() bool {
+	return r.tasks.Count() > 0 && r.mode == AwaitingTask && r.tasker.IsEndReached()
 }
 
 // ALL DONE.
