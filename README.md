@@ -1,4 +1,4 @@
-# RobotWarehouseSimLib
+# Robot Warehouse Simulation Library
 
 ## Packages (a brief description)
 **librobot**  - interfaces for Warehouse and Robot objects, implemented by **warehouse** and **robot** packages
