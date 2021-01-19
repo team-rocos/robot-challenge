@@ -1,4 +1,4 @@
-package simulatorCli
+package simcli
 
 import "github.com/solimov-advanced/robot-challenge/librobot"
 

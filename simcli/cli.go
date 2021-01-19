@@ -1,4 +1,4 @@
-package simulatorCli
+package simcli
 
 import (
 	"bufio"
