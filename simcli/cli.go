@@ -42,7 +42,7 @@ func (c *Cli) loopCli() {
 	c.isRunning = true
 	c.exit = false
 	reader := bufio.NewReader(os.Stdin)
-	for c.isRunning {
+	for true {
 		fmt.Print("-> ")
 		text, _ := reader.ReadString('\n')
 		text = strings.Replace(text, "\n", "", -1)
@@ -56,6 +56,9 @@ func (c *Cli) loopCli() {
 		//}
 		if c.exit {
 			c.isRunning = false
+			time.Sleep(500 * time.Millisecond)
+			fmt.Println("terminating go routine...")
+			break
 		}
 	}
 }
