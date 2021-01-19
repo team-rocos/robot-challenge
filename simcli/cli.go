@@ -64,6 +64,9 @@ func (c *Cli) parseInput(input string) {
 	case "exit":
 		c.exit = true
 		return
+	case "quit":
+		c.exit = true
+		return
 	case "help":
 		printHelp()
 		return
@@ -166,6 +169,11 @@ func (c *Cli) parseInput(input string) {
 		}
 		return
 	}
+}
+
+func (c Cli) QuitIfNoTasks() {
+	for
+	c.exit = true
 }
 
 func (c *Cli) AddWarehouse(id string, x, y int) {
