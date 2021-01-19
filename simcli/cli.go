@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Cli is an abstraction of the command-line interface for the simulator.
@@ -39,23 +40,24 @@ func (c Cli) IsRunning() bool {
 
 func (c *Cli) loopCli() {
 	c.isRunning = true
+	c.exit = false
 	reader := bufio.NewReader(os.Stdin)
-	for !c.exit {
+	for c.isRunning {
 		fmt.Print("-> ")
 		text, _ := reader.ReadString('\n')
 		text = strings.Replace(text, "\n", "", -1)
 		c.parseInput(text)
 
+		time.Sleep(10 * time.Millisecond)
+
 		//for _, t := range c.tasks {
 		//	pos := <-t.position
 		//	fmt.Println("Task", t.taskId,", Robot:", t.robotId,", x:", pos.X,", y:", pos.Y,", hasCrate:", pos.HasCrate)
 		//}
-		if text == "exit" || c.exit {
-			break
+		if c.exit {
+			c.isRunning = false
 		}
 	}
-	c.isRunning = false
-	c.exit = false
 }
 
 func (c *Cli) parseInput(input string) {
@@ -65,9 +67,11 @@ func (c *Cli) parseInput(input string) {
 	}
 	switch fields[0] {
 	case "exit":
+		fmt.Println("quitting...")
 		c.exit = true
 		return
 	case "quit":
+		fmt.Println("quitting...")
 		c.exit = true
 		return
 	case "help":
