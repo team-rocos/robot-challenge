@@ -1,3 +1,12 @@
+Note: 
+
+It's my first time using go and my first time using the interface concept. 
+
+I haven't ever written code for anyone other than myself either!
+
+I wasn't entirely sure how the channels returned by "EnqueueTask" were meant to be used.
+
+
 # Robot Warehouse Simulation Library
 
 ## Packages (a brief description)
