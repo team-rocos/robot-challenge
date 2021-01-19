@@ -39,8 +39,7 @@ func (c Cli) IsRunning() bool {
 }
 
 func (c *Cli) loopCli() {
-	c.isRunning = true
-	c.exit = false
+
 	reader := bufio.NewReader(os.Stdin)
 	for true {
 		fmt.Print("-> ")
@@ -55,7 +54,7 @@ func (c *Cli) loopCli() {
 		//	fmt.Println("Task", t.taskId,", Robot:", t.robotId,", x:", pos.X,", y:", pos.Y,", hasCrate:", pos.HasCrate)
 		//}
 		if c.exit {
-			c.isRunning = false
+			(*c).isRunning = false
 			time.Sleep(500 * time.Millisecond)
 			fmt.Println("terminating go routine...")
 			break
