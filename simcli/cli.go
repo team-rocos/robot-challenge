@@ -16,7 +16,7 @@ import (
 type Cli struct {
 	warehouses []librobot.Warehouse
 	tasks      []activeTask
-	exit       bool
+	exitFlag   bool
 	isRunning  bool
 }
 
@@ -25,23 +25,27 @@ func NewSimulatorCli() Cli {
 	cli := Cli{
 		warehouses: make([]librobot.Warehouse, 0),
 		tasks:      make([]activeTask, 0),
-		exit:       false,
+		exitFlag:   false,
 		isRunning:  false,
 	}
-	printHelp()
-	cli.isRunning = true
-	go cli.loopCli()
 	return cli
 }
 
+func (c *Cli) Start() {
+	printHelp()
+	if !c.isRunning {
+		go c.loopCli()
+	}
+}
+
 func (c Cli) IsRunning() bool {
-	return c.isRunning
+	return c.isRunning && !c.exitFlag
 }
 
 func (c *Cli) loopCli() {
-
+	c.isRunning = true
 	reader := bufio.NewReader(os.Stdin)
-	for true {
+	for !c.exitFlag {
 		fmt.Print("-> ")
 		text, _ := reader.ReadString('\n')
 		text = strings.Replace(text, "\n", "", -1)
@@ -53,13 +57,9 @@ func (c *Cli) loopCli() {
 		//	pos := <-t.position
 		//	fmt.Println("Task", t.taskId,", Robot:", t.robotId,", x:", pos.X,", y:", pos.Y,", hasCrate:", pos.HasCrate)
 		//}
-		if c.exit {
-			(*c).isRunning = false
-			time.Sleep(500 * time.Millisecond)
-			fmt.Println("terminating go routine...")
-			break
-		}
 	}
+	c.isRunning = false
+	fmt.Println("terminating go routine...")
 }
 
 func (c *Cli) parseInput(input string) {
@@ -70,11 +70,11 @@ func (c *Cli) parseInput(input string) {
 	switch fields[0] {
 	case "exit":
 		fmt.Println("quitting...")
-		c.exit = true
+		c.exitFlag = true
 		return
 	case "quit":
 		fmt.Println("quitting...")
-		c.exit = true
+		c.exitFlag = true
 		return
 	case "help":
 		printHelp()
@@ -249,7 +249,7 @@ func (c *Cli) QuitIfNoTasks() {
 			}
 		}
 	}
-	c.exit = true
+	c.exitFlag = true
 }
 
 func (c Cli) findWarehouseId(id string) int {
