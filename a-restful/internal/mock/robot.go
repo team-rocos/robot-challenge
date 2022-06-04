@@ -3,11 +3,7 @@ package mock
 import "github.com/edwardkcyu/robot-challenge/a-restful/thirdparty"
 
 type MockRobot struct {
-	state thirdparty.RobotState
-}
-
-func NewMockRobot() *MockRobot {
-	return &MockRobot{}
+	State thirdparty.RobotState
 }
 
 func (r *MockRobot) EnqueueTask(commands string) (
@@ -23,5 +19,5 @@ func (r *MockRobot) CancelTask(taskID string) error {
 }
 
 func (r *MockRobot) CurrentState() thirdparty.RobotState {
-	return r.state
+	return r.State
 }
