@@ -9,7 +9,8 @@ import (
 )
 
 type IRobotService interface {
-	EnqueueTask(command string) error
+	EnqueueTask(command string) (string, error)
+	ValidateMovement(command string) error
 }
 
 type RobotService struct {
@@ -24,12 +25,13 @@ func NewRobotService(robot thirdparty.Robot) *RobotService {
 	}
 }
 
-func (s *RobotService) EnqueueTask(command string) error {
-	s.log.Info("run command")
-	return nil
+func (s *RobotService) EnqueueTask(command string) (string, error) {
+	taskID, _, _ := s.robot.EnqueueTask(command)
+
+	return taskID, nil
 }
 
-func (s *RobotService) validateMovement(command string) error {
+func (s *RobotService) ValidateMovement(command string) error {
 	position := s.robot.CurrentState()
 	moves := strings.Split(command, " ")
 

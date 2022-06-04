@@ -28,12 +28,22 @@ func ErrorHandler(next func(http.ResponseWriter, *http.Request) error) func(http
 			return
 		}
 
-		status, headers := httpError.ResponseHeaders() // Get http status code and headers.
+		headers := ResponseHeaders()
 		for k, v := range headers {
 			w.Header().Set(k, v)
 		}
-		w.WriteHeader(status)
+		w.WriteHeader(httpError.Status)
 		w.Write(body)
 		log.Println(httpError)
+	}
+}
+
+func ResponseHandler(next func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		headers := ResponseHeaders()
+		for k, v := range headers {
+			w.Header().Set(k, v)
+		}
+		next(w, r)
 	}
 }

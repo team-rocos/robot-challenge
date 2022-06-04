@@ -12,24 +12,24 @@ type ClientError interface {
 }
 
 type HTTPError struct {
-	Cause  error  `json:"-"`
-	Detail string `json:"detail"`
-	Status int    `json:"-"`
+	Cause        error  `json:"-"`            // for backend logs
+	ErrorMessage string `json:"errorMessage"` // for client message
+	Status       int    `json:"-"`
 }
 
-func NewHTTPError(err error, status int, detail string) error {
+func NewHTTPError(err error, status int, message string) error {
 	return &HTTPError{
-		Cause:  err,
-		Detail: detail,
-		Status: status,
+		Cause:        err,
+		ErrorMessage: message,
+		Status:       status,
 	}
 }
 
 func (e *HTTPError) Error() string {
 	if e.Cause == nil {
-		return e.Detail
+		return e.ErrorMessage
 	}
-	return fmt.Sprintf("%s : %s", e.Detail, e.Cause.Error())
+	return fmt.Sprintf("%s : %s", e.ErrorMessage, e.Cause.Error())
 }
 
 // ResponseBody returns JSON response body.

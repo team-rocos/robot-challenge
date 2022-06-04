@@ -34,24 +34,25 @@ func (h *RobotHandler) EnqueueTaskHandler(w http.ResponseWriter, r *http.Request
 		return NewHTTPError(err, http.StatusBadRequest, "unable to decode request body")
 	}
 
-	//token, err := h.authService.Login(service.LoginInput{
-	//	Username: payload.Username,
-	//	Password: payload.Password,
-	//})
-	//if err != nil {
-	//	return NewHTTPError(err, http.StatusInternalServerError, "failed to login")
-	//}
-	//
-	//resp, err := json.Marshal(LoginResponse{
-	//	Token: token,
-	//})
-	//if err != nil {
-	//	return NewHTTPError(err, http.StatusInternalServerError, "unable to marshall response")
-	//}
+	err := h.robotService.ValidateMovement(payload.Command)
+	if err != nil {
+		return NewHTTPError(err, http.StatusBadRequest, err.Error())
+	}
+
+	taskID, err := h.robotService.EnqueueTask(payload.Command)
+	if err != nil {
+		return NewHTTPError(err, http.StatusInternalServerError, "failed to enqueue task to robot")
+	}
+
+	resp, err := json.Marshal(EnqueueTaskResponse{
+		TaskID: taskID,
+	})
+	if err != nil {
+		return NewHTTPError(err, http.StatusInternalServerError, "unable to marshall response")
+	}
 
 	w.WriteHeader(http.StatusOK)
-	//w.Write(resp)
+	w.Write(resp)
 
-	h.log.Info("enqueue task")
 	return nil
 }

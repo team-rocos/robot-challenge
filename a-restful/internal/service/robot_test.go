@@ -8,7 +8,7 @@ import (
 	"github.com/edwardkcyu/robot-challenge/a-restful/thirdparty"
 )
 
-func TestRobotService_validateMovement(t *testing.T) {
+func TestRobotService_ValidateMovement(t *testing.T) {
 	tests := []struct {
 		name    string
 		robot   thirdparty.Robot
@@ -77,7 +77,7 @@ func TestRobotService_validateMovement(t *testing.T) {
 			s := &RobotService{
 				robot: tt.robot,
 			}
-			if err := s.validateMovement(tt.command); (err != nil) != tt.wantErr {
+			if err := s.ValidateMovement(tt.command); (err != nil) != tt.wantErr {
 				t.Errorf("validateMovement() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
