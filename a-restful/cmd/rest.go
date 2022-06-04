@@ -17,8 +17,8 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/commands", wrapHandler(robotHandler.EnqueueTaskHandler)).Methods("POST")
-	//s.router.HandleFunc("/commands", httphandler.ErrorHandler(robotHandler.CommandHandler)).Methods("GET")
-	//s.router.HandleFunc("/commands", httphandler.ErrorHandler(robotHandler.CommandHandler)).Methods("PUT")
+	//r.HandleFunc("/commands", wrapHandler(robotHandler.CurrentStateHandler)).Methods("GET")
+	r.HandleFunc("/commands", httphandler.ErrorHandler(robotHandler.CancelTaskHandler)).Methods("DELETE")
 
 	server.Start("8080", r)
 }

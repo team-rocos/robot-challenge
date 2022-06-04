@@ -8,9 +8,24 @@ import (
 	"github.com/edwardkcyu/robot-challenge/a-restful/thirdparty"
 )
 
+const (
+	MaxEast  = 9
+	MinEast  = 0
+	MaxNorth = 9
+	MinNorth = 0
+)
+
+const (
+	North string = "N"
+	East         = "E"
+	South        = "S"
+	West         = "W"
+)
+
 type IRobotService interface {
 	EnqueueTask(command string) (string, error)
 	ValidateMovement(command string) error
+	CancelTask(taskID string) error
 }
 
 type RobotService struct {
@@ -69,16 +84,11 @@ func (s *RobotService) ValidateMovement(command string) error {
 	return nil
 }
 
-const (
-	MaxEast  = 9
-	MinEast  = 0
-	MaxNorth = 9
-	MinNorth = 0
-)
+func (s *RobotService) CancelTask(taskID string) error {
+	err := s.robot.CancelTask(taskID)
+	if err != nil {
+		return fmt.Errorf("robot failed to cancel task: %w", err)
+	}
 
-const (
-	North string = "N"
-	East         = "E"
-	South        = "S"
-	West         = "W"
-)
+	return nil
+}

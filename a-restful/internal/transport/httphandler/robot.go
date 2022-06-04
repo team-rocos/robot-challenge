@@ -56,3 +56,23 @@ func (h *RobotHandler) EnqueueTaskHandler(w http.ResponseWriter, r *http.Request
 
 	return nil
 }
+
+type CancelTaskRequest struct {
+	TaskID string `json:"taskId"`
+}
+
+func (h *RobotHandler) CancelTaskHandler(w http.ResponseWriter, r *http.Request) error {
+	var payload CancelTaskRequest
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		return NewHTTPError(err, http.StatusBadRequest, "unable to decode request body")
+	}
+
+	err := h.robotService.CancelTask(payload.TaskID)
+	if err != nil {
+		return NewHTTPError(err, http.StatusInternalServerError, "failed to cancel task to robot")
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	return nil
+}
