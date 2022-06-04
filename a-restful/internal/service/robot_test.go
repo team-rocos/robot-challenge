@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/edwardkcyu/robot-challenge/a-restful/internal/mock"
-
 	"github.com/edwardkcyu/robot-challenge/a-restful/thirdparty"
 )
 
@@ -16,57 +15,32 @@ func TestRobotService_ValidateMovement(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "valid move",
-			robot: &mock.MockRobot{
-				State: thirdparty.RobotState{
-					X: 0,
-					Y: 0,
-				},
-			},
+			name:    "valid move",
+			robot:   mock.NewMockRobot(0, 0),
 			command: "N N N N N",
 			wantErr: false,
 		},
 		{
-			name: "move out of north boundary",
-			robot: &mock.MockRobot{
-				State: thirdparty.RobotState{
-					X: 0,
-					Y: 8,
-				},
-			},
+			name:    "move out of north boundary",
+			robot:   mock.NewMockRobot(0, 8),
 			command: "N N N N N",
 			wantErr: true,
 		},
 		{
-			name: "move out of east boundary",
-			robot: &mock.MockRobot{
-				State: thirdparty.RobotState{
-					X: 8,
-					Y: 0,
-				},
-			},
+			name:    "move out of east boundary",
+			robot:   mock.NewMockRobot(8, 0),
 			command: "E E E E E",
 			wantErr: true,
 		},
 		{
-			name: "move out of south boundary",
-			robot: &mock.MockRobot{
-				State: thirdparty.RobotState{
-					X: 2,
-					Y: 0,
-				},
-			},
+			name:    "move out of south boundary",
+			robot:   mock.NewMockRobot(2, 0),
 			command: "S S S S S",
 			wantErr: true,
 		},
 		{
-			name: "move out of west boundary",
-			robot: &mock.MockRobot{
-				State: thirdparty.RobotState{
-					X: 0,
-					Y: 2,
-				},
-			},
+			name:    "move out of west boundary",
+			robot:   mock.NewMockRobot(0, 2),
 			command: "W W W W",
 			wantErr: true,
 		},

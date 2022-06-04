@@ -16,9 +16,9 @@ func main() {
 	robotHandler := httphandler.NewRobotHandler(service.NewRobotService(thirdparty.NewRealRobot()))
 
 	r := mux.NewRouter()
-	r.HandleFunc("/commands", wrapHandler(robotHandler.EnqueueTaskHandler)).Methods("POST")
-	//r.HandleFunc("/commands", wrapHandler(robotHandler.CurrentStateHandler)).Methods("GET")
-	r.HandleFunc("/commands", httphandler.ErrorHandler(robotHandler.CancelTaskHandler)).Methods("DELETE")
+	r.HandleFunc("/tasks", wrapHandler(robotHandler.EnqueueTaskHandler)).Methods("POST")
+	r.HandleFunc("/tasks", wrapHandler(robotHandler.CancelTaskHandler)).Methods("DELETE")
+	r.HandleFunc("/tasks", wrapHandler(robotHandler.QueryTaskHandler)).Methods("GET")
 
 	server.Start("8080", r)
 }

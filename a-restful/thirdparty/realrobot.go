@@ -36,3 +36,10 @@ func (r *RealRobot) CancelTask(taskID string) error {
 func (r *RealRobot) CurrentState() RobotState {
 	return r.state
 }
+
+func (r *RealRobot) QueryTask(taskId string) (Task, error) {
+	task := Task{
+		Status: TaskStatusExecuting,
+	}
+	return task, nil
+}

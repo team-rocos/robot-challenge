@@ -9,10 +9,10 @@ import (
 )
 
 const (
-	MaxEast  = 9
-	MinEast  = 0
-	MaxNorth = 9
-	MinNorth = 0
+	MaxEast  uint = 9
+	MinEast       = 0
+	MaxNorth      = 9
+	MinNorth      = 0
 )
 
 const (
@@ -26,6 +26,7 @@ type IRobotService interface {
 	EnqueueTask(command string) (string, error)
 	ValidateMovement(command string) error
 	CancelTask(taskID string) error
+	QueryTask(taskID string) (thirdparty.TaskStatus, error)
 }
 
 type RobotService struct {
@@ -91,4 +92,13 @@ func (s *RobotService) CancelTask(taskID string) error {
 	}
 
 	return nil
+}
+
+func (s *RobotService) QueryTask(taskID string) (thirdparty.TaskStatus, error) {
+	task, err := s.robot.QueryTask(taskID)
+	if err != nil {
+		return thirdparty.TaskStatusUnknown, fmt.Errorf("robot failed to query task: %w", err)
+	}
+
+	return task.Status, nil
 }

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/edwardkcyu/robot-challenge/a-restful/thirdparty"
+
 	"github.com/edwardkcyu/robot-challenge/a-restful/internal/service"
 	"github.com/edwardkcyu/robot-challenge/a-restful/internal/util"
 )
@@ -73,6 +75,31 @@ func (h *RobotHandler) CancelTaskHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+	return nil
+}
+
+type QueryTaskResponse struct {
+	Status thirdparty.TaskStatus `json:"status"`
+}
+
+func (h *RobotHandler) QueryTaskHandler(w http.ResponseWriter, r *http.Request) error {
+	taskID := r.URL.Query().Get("taskId")
+
+	taskStatus, err := h.robotService.QueryTask(taskID)
+	if err != nil {
+		return NewHTTPError(err, http.StatusInternalServerError, "failed to query task")
+	}
+
+	resp, err := json.Marshal(QueryTaskResponse{
+		Status: taskStatus,
+	})
+	if err != nil {
+		return NewHTTPError(err, http.StatusInternalServerError, "unable to marshall response")
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 
 	return nil
 }
