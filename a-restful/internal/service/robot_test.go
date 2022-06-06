@@ -64,7 +64,7 @@ func TestRobotService_EnqueueTask(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:  "enqueues successfully",
+			name:  "enqueues a task",
 			robot: mock.NewMockRobot(1, 2),
 		},
 		{
@@ -80,6 +80,34 @@ func TestRobotService_EnqueueTask(t *testing.T) {
 			dummyCommand := "E"
 			if _, err := s.EnqueueTask(dummyCommand); (err != nil) != tt.wantErr {
 				t.Errorf("EnqueueTask() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestRobotService_CancelTask(t *testing.T) {
+	tests := []struct {
+		name    string
+		robot   thirdparty.Robot
+		wantErr bool
+	}{
+		{
+			name:  "cancels move",
+			robot: mock.NewMockRobot(0, 0),
+		},
+		{
+			name:    "cancels with error",
+			robot:   mock.NewMockRobot(0, 0).WithHasCancelTaskError(true),
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := NewRobotService(tt.robot)
+
+			if err := s.CancelTask("task1"); (err != nil) != tt.wantErr {
+				t.Errorf("CancelTask() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

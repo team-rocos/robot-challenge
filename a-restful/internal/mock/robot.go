@@ -9,6 +9,7 @@ import (
 type MockRobot struct {
 	state               thirdparty.RobotState
 	hasEnqueueTaskError bool
+	hasCancelTaskError  bool
 }
 
 func NewMockRobot(x uint, y uint) *MockRobot {
@@ -22,6 +23,11 @@ func NewMockRobot(x uint, y uint) *MockRobot {
 
 func (r *MockRobot) WithHasEnqueueTaskError(hasEnqueueTaskError bool) *MockRobot {
 	r.hasEnqueueTaskError = hasEnqueueTaskError
+	return r
+}
+
+func (r *MockRobot) WithHasCancelTaskError(hasCancelTaskError bool) *MockRobot {
+	r.hasCancelTaskError = hasCancelTaskError
 	return r
 }
 
@@ -60,6 +66,9 @@ func (r *MockRobot) EnqueueTask(commands string) (
 }
 
 func (r *MockRobot) CancelTask(taskID string) error {
+	if r.hasCancelTaskError {
+		return errors.New("cancel task failed")
+	}
 	return nil
 }
 
