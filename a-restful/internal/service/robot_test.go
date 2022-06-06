@@ -92,7 +92,7 @@ func TestRobotService_CancelTask(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:  "cancels move",
+			name:  "cancels task",
 			robot: mock.NewMockRobot(0, 0),
 		},
 		{

@@ -48,11 +48,11 @@ func (s *RobotService) EnqueueTask(command string) (string, error) {
 	defer close(positionChannel)
 
 	err := <-errChannel
+	position := <-positionChannel
+
 	if err != nil {
 		return "", errors.New("failed to enqueue task to robot")
 	}
-
-	position := <-positionChannel
 
 	// Not clear what should be done with the position
 	s.log.Info("robot position: %v", position)
