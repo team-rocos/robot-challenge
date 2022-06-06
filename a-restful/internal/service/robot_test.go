@@ -112,3 +112,31 @@ func TestRobotService_CancelTask(t *testing.T) {
 		})
 	}
 }
+
+func TestRobotService_QueryTask(t *testing.T) {
+	tests := []struct {
+		name    string
+		robot   thirdparty.Robot
+		wantErr bool
+	}{
+		{
+			name:  "queries task",
+			robot: mock.NewMockRobot(0, 0),
+		},
+		{
+			name:    "queries task with error",
+			robot:   mock.NewMockRobot(0, 0).WithHasQueryTaskError(true),
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := NewRobotService(tt.robot)
+
+			if _, err := s.QueryTask("task1"); (err != nil) != tt.wantErr {
+				t.Errorf("CancelTask() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

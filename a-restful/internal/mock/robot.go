@@ -10,6 +10,7 @@ type MockRobot struct {
 	state               thirdparty.RobotState
 	hasEnqueueTaskError bool
 	hasCancelTaskError  bool
+	hasQueryTaskError   bool
 }
 
 func NewMockRobot(x uint, y uint) *MockRobot {
@@ -28,6 +29,11 @@ func (r *MockRobot) WithHasEnqueueTaskError(hasEnqueueTaskError bool) *MockRobot
 
 func (r *MockRobot) WithHasCancelTaskError(hasCancelTaskError bool) *MockRobot {
 	r.hasCancelTaskError = hasCancelTaskError
+	return r
+}
+
+func (r *MockRobot) WithHasQueryTaskError(hasQueryTaskError bool) *MockRobot {
+	r.hasQueryTaskError = hasQueryTaskError
 	return r
 }
 
@@ -77,6 +83,10 @@ func (r *MockRobot) CurrentState() thirdparty.RobotState {
 }
 
 func (r *MockRobot) QueryTask(taskId string) (thirdparty.Task, error) {
+	if r.hasQueryTaskError {
+		return thirdparty.Task{}, errors.New("query task failed")
+	}
+
 	task := thirdparty.Task{
 		Status: thirdparty.TaskStatusExecuting,
 	}
