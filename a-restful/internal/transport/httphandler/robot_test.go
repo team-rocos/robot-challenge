@@ -1,6 +1,7 @@
 package httphandler
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -32,7 +33,7 @@ func TestRobotHandler_QueryTaskHandler(t *testing.T) {
 			wantTaskStatus: thirdparty.TaskStatusExecuting,
 		},
 		{
-			name:           "queries the task status",
+			name:           "queries the task status with error",
 			robotService:   service.NewRobotService(mock.NewMockRobot(0, 0).WithHasQueryTaskError(true)),
 			wantHttpStatus: http.StatusInternalServerError,
 			wantTaskStatus: "",
@@ -58,6 +59,46 @@ func TestRobotHandler_QueryTaskHandler(t *testing.T) {
 
 			assert.Equal(t, tt.wantTaskStatus, result.Status)
 
+		})
+	}
+}
+
+func TestRobotHandler_CancelTaskHandler(t *testing.T) {
+
+	tests := []struct {
+		name           string
+		robotService   service.IRobotService
+		wantErr        bool
+		wantHttpStatus int
+	}{
+		{
+			name:           "cancels the task",
+			robotService:   service.NewRobotService(mock.NewMockRobot(0, 0)),
+			wantHttpStatus: http.StatusOK,
+		},
+		{
+			name:           "cancels the task with error",
+			robotService:   service.NewRobotService(mock.NewMockRobot(0, 0).WithHasCancelTaskError(true)),
+			wantHttpStatus: http.StatusInternalServerError,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cancelTaskReq := CancelTaskRequest{
+				TaskID: "task1",
+			}
+
+			var buf bytes.Buffer
+			err := json.NewEncoder(&buf).Encode(cancelTaskReq)
+			assert.Nil(t, err)
+
+			req := httptest.NewRequest(http.MethodDelete, "/commands", &buf)
+			w := httptest.NewRecorder()
+
+			h := NewRobotHandler(tt.robotService)
+			ResponseHandler(ErrorHandler(h.CancelTaskHandler))(w, req)
+
+			assert.Equal(t, tt.wantHttpStatus, w.Code)
 		})
 	}
 }
