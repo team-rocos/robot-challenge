@@ -22,7 +22,6 @@ func TestRobotHandler_QueryTaskHandler(t *testing.T) {
 	tests := []struct {
 		name           string
 		robotService   service.IRobotService
-		wantErr        bool
 		wantHttpStatus int
 		wantTaskStatus thirdparty.TaskStatus
 	}{
@@ -68,7 +67,6 @@ func TestRobotHandler_CancelTaskHandler(t *testing.T) {
 	tests := []struct {
 		name           string
 		robotService   service.IRobotService
-		wantErr        bool
 		wantHttpStatus int
 	}{
 		{
@@ -97,6 +95,52 @@ func TestRobotHandler_CancelTaskHandler(t *testing.T) {
 
 			h := NewRobotHandler(tt.robotService)
 			ResponseHandler(ErrorHandler(h.CancelTaskHandler))(w, req)
+
+			assert.Equal(t, tt.wantHttpStatus, w.Code)
+		})
+	}
+}
+
+func TestRobotHandler_EnqueueTaskHandler(t *testing.T) {
+	tests := []struct {
+		name           string
+		robotService   service.IRobotService
+		command        string
+		wantHttpStatus int
+	}{
+		{
+			name:           "enqueues the task",
+			robotService:   service.NewRobotService(mock.NewMockRobot(0, 0)),
+			wantHttpStatus: http.StatusOK,
+		},
+		{
+			name:           "enqueues the task",
+			robotService:   service.NewRobotService(mock.NewMockRobot(8, 8)),
+			command:        "N N N",
+			wantHttpStatus: http.StatusBadRequest,
+		},
+		{
+			name:           "enqueues the task with error",
+			robotService:   service.NewRobotService(mock.NewMockRobot(0, 0).WithHasEnqueueTaskError(true)),
+			wantHttpStatus: http.StatusInternalServerError,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			enqueueTaskReq := EnqueueTaskRequest{
+				Command: tt.command,
+			}
+
+			var buf bytes.Buffer
+			err := json.NewEncoder(&buf).Encode(enqueueTaskReq)
+			assert.Nil(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/commands", &buf)
+			w := httptest.NewRecorder()
+
+			h := NewRobotHandler(tt.robotService)
+			ResponseHandler(ErrorHandler(h.EnqueueTaskHandler))(w, req)
 
 			assert.Equal(t, tt.wantHttpStatus, w.Code)
 		})
