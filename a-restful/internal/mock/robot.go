@@ -1,9 +1,14 @@
 package mock
 
-import "github.com/edwardkcyu/robot-challenge/a-restful/thirdparty"
+import (
+	"errors"
+
+	"github.com/edwardkcyu/robot-challenge/a-restful/thirdparty"
+)
 
 type MockRobot struct {
-	state thirdparty.RobotState
+	state               thirdparty.RobotState
+	hasEnqueueTaskError bool
 }
 
 func NewMockRobot(x uint, y uint) *MockRobot {
@@ -15,11 +20,42 @@ func NewMockRobot(x uint, y uint) *MockRobot {
 	}
 }
 
+func (r *MockRobot) WithHasEnqueueTaskError(hasEnqueueTaskError bool) *MockRobot {
+	r.hasEnqueueTaskError = hasEnqueueTaskError
+	return r
+}
+
 func (r *MockRobot) EnqueueTask(commands string) (
 	taskID string, position chan thirdparty.RobotState, err chan error,
 ) {
 	position = make(chan thirdparty.RobotState)
 	err = make(chan error)
+
+	if r.hasEnqueueTaskError {
+		go func() {
+			position <- thirdparty.RobotState{}
+		}()
+
+		go func() {
+			err <- errors.New("enqueue task failed")
+		}()
+
+		return "", position, err
+
+	}
+
+	go func() {
+		position <- thirdparty.RobotState{
+			X:        1,
+			Y:        2,
+			HasCrate: false,
+		}
+	}()
+
+	go func() {
+		err <- nil
+	}()
+
 	return "task1", position, err
 }
 
