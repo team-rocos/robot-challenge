@@ -3,7 +3,8 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o main cmd/rest.go
+RUN make test
+RUN make build
 
 FROM alpine:3.12
 WORKDIR /app
