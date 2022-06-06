@@ -24,12 +24,21 @@ type RobotState struct {
 type TaskStatus string
 
 const (
-	TaskStatusUnknown   TaskStatus = "UNKNOWN"
-	TaskStatusPending              = "PENDING"
-	TaskStatusExecuting            = "EXECUTING"
-	TaskStatusDone                 = "DONE"
+	TaskStatusUnknown   = TaskStatus("UNKNOWN")
+	TaskStatusPending   = TaskStatus("PENDING")
+	TaskStatusExecuting = TaskStatus("EXECUTING")
+	TaskStatusDone      = TaskStatus("DONE")
 )
 
 type Task struct {
 	Status TaskStatus
 }
+
+type Season int64
+
+const (
+	Summer Season = 0
+	Autumn        = 1
+	Winter        = 2
+	Spring        = 3
+)
